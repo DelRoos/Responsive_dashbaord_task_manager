@@ -10,6 +10,7 @@ import 'package:task_dashboard/app/shared_components/card_task.dart';
 import 'package:task_dashboard/app/shared_components/header_text.dart';
 import 'package:task_dashboard/app/shared_components/list_task_assigned.dart';
 import 'package:task_dashboard/app/shared_components/list_task_date.dart';
+import 'package:task_dashboard/app/shared_components/responsive_builder.dart';
 import 'package:task_dashboard/app/shared_components/search_field.dart';
 import 'package:task_dashboard/app/shared_components/selection_button.dart';
 import 'package:task_dashboard/app/shared_components/simple_selection_button.dart';
@@ -25,6 +26,7 @@ part '../components/task_in_progress.dart';
 part '../components/header_weekly_task.dart';
 part '../components/weekly_task.dart';
 part '../components/task_group.dart';
+part '../components/bottom_navbar.dart';
 
 class DashboardScreen extends GetView<DashboardController> {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -32,29 +34,85 @@ class DashboardScreen extends GetView<DashboardController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Row(
-        children: [
-          Flexible(
-            flex: 3,
-            child: SingleChildScrollView(
-              child: _buildSideBar(context),
-            ),
-          ),
-          Flexible(
-            flex: 10,
-            child: SingleChildScrollView(child: _buildTaskContentTask()),
-          ),
-          SizedBox(
-            height: MediaQuery.of(context).size.height,
-            child: const VerticalDivider(),
-          ),
-          Flexible(
-            flex: 4,
-            child: SingleChildScrollView(child: _buildCalendarContent()),
-          ),
-        ],
-      ),
-    );
+        key: controller.scaffoldKey,
+        drawer: ResponsiveBuilder.isDesktop(context)
+            ? null
+            : Drawer(
+                child: SafeArea(
+                  child: SingleChildScrollView(
+                    child: _buildSideBar(context),
+                  ),
+                ),
+              ),
+        bottomNavigationBar:
+            ResponsiveBuilder.isDesktop(context) ? null : _BottomNavBar(),
+        body: ResponsiveBuilder(
+          mobileBuilder: (context, constraints) {
+            return SafeArea(
+              child: SingleChildScrollView(
+                controller: ScrollController(),
+                child: Column(
+                  children: [
+                    _buildTaskContentTask(
+                      onPressedMenu: () => controller.openDrawer(),
+                    ),
+                    _buildCalendarContent(),
+                  ],
+                ),
+              ),
+            );
+          },
+          tabletBuilder: (context, constraints) {
+            return SafeArea(
+              child: Row(
+                children: [
+                  Flexible(
+                    flex: constraints.maxWidth > 800 ? 8 : 7,
+                    child: SingleChildScrollView(
+                      controller: ScrollController(),
+                      child: _buildTaskContentTask(
+                        onPressedMenu: () => controller.openDrawer(),
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    child: const VerticalDivider(),
+                  ),
+                  Flexible(
+                    flex: 4,
+                    child:
+                        SingleChildScrollView(child: _buildCalendarContent()),
+                  ),
+                ],
+              ),
+            );
+          },
+          desktopBuilder: (context, constraints) {
+            return Row(
+              children: [
+                Flexible(
+                  flex: constraints.maxWidth > 1350 ? 3 : 4,
+                  child: SingleChildScrollView(
+                    child: _buildSideBar(context),
+                  ),
+                ),
+                Flexible(
+                  flex: constraints.maxWidth > 1350 ? 10 : 9,
+                  child: SingleChildScrollView(child: _buildTaskContentTask()),
+                ),
+                SizedBox(
+                  height: MediaQuery.of(context).size.height,
+                  child: const VerticalDivider(),
+                ),
+                Flexible(
+                  flex: 4,
+                  child: SingleChildScrollView(child: _buildCalendarContent()),
+                ),
+              ],
+            );
+          },
+        ));
   }
 
   Widget _buildSideBar(BuildContext context) {
@@ -99,23 +157,44 @@ class DashboardScreen extends GetView<DashboardController> {
     );
   }
 
-  Widget _buildTaskContentTask() {
+  Widget _buildTaskContentTask({Function()? onPressedMenu}) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: kSpacing),
       child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: kSpacing),
-          SearchField(
-            onSearch: controller.searchTask,
-            hintText: "Search task...",
+          Row(
+            children: [
+              if (onPressedMenu != null)
+                Padding(
+                  padding: const EdgeInsets.only(right: kSpacing / 2),
+                  child: IconButton(
+                    onPressed: onPressedMenu,
+                    icon: const Icon(
+                      Icons.menu,
+                    ),
+                  ),
+                ),
+              Expanded(
+                child: SearchField(
+                  onSearch: controller.searchTask,
+                  hintText: "Search task...",
+                ),
+              ),
+            ],
           ),
           const SizedBox(height: kSpacing),
           Row(
             children: [
-              HeaderText(
-                data: DateTime.now().formatdMMMMY(),
+              Expanded(
+                child: HeaderText(
+                  data: DateTime.now().formatdMMMMY(),
+                ),
               ),
-              const Spacer(),
+              // const Spacer(),
+              const SizedBox(height: kSpacing / 2),
+
               SizedBox(
                 width: 200,
                 child: TaskProgress(data: controller.dataTask),

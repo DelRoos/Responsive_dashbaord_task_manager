@@ -12,6 +12,8 @@ import 'package:task_dashboard/app/shared_components/task_progress.dart';
 import 'package:task_dashboard/app/shared_components/user_profile.dart';
 
 class DashboardController extends GetxController {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+
   final dataProfile = const UserProfileData(
     image: AssetImage(ImageRasterPath.man),
     jobDesk: "Mobile, Web Developper and Scraper",
@@ -131,4 +133,10 @@ class DashboardController extends GetxController {
   void onSelectedMainMenu(int index, SelectionButtonData value) {}
   void onSelectedTaskMenu(int index, String value) {}
   void searchTask(String value) {}
+
+  void openDrawer() {
+    if (scaffoldKey.currentState != null) {
+      scaffoldKey.currentState!.openDrawer();
+    }
+  }
 }
