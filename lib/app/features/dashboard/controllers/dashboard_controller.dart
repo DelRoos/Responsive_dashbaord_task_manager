@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import 'package:task_dashboard/app/constant/app_constant.dart';
 import 'package:task_dashboard/app/shared_components/card_task.dart';
 import 'package:task_dashboard/app/shared_components/list_task_assigned.dart';
+import 'package:task_dashboard/app/shared_components/list_task_date.dart';
 import 'package:task_dashboard/app/shared_components/selection_button.dart';
 import 'package:task_dashboard/app/shared_components/task_progress.dart';
 import 'package:task_dashboard/app/shared_components/user_profile.dart';
@@ -71,11 +72,60 @@ class DashboardController extends GetxController {
     ),
   ];
 
+  final taskGroup = [
+    [
+      ListTaskDateData(
+        date: DateTime.now().add(const Duration(days: 2, hours: 10)),
+        label: "5 posts on instagram",
+        jobdesk: "Marketing",
+      ),
+      ListTaskDateData(
+        date: DateTime.now().add(const Duration(days: 2, hours: 11)),
+        label: "Platform Concept",
+        jobdesk: "Animation",
+      ),
+    ],
+    [
+      ListTaskDateData(
+        date: DateTime.now().add(const Duration(days: 4, hours: 5)),
+        label: "UI UX Marketplace",
+        jobdesk: "Design",
+      ),
+      ListTaskDateData(
+        date: DateTime.now().add(const Duration(days: 4, hours: 6)),
+        label: "Create Post For App",
+        jobdesk: "Marketing",
+      ),
+    ],
+    [
+      ListTaskDateData(
+        date: DateTime.now().add(const Duration(days: 6, hours: 5)),
+        label: "2 Posts on Facebook",
+        jobdesk: "Marketing",
+      ),
+      ListTaskDateData(
+        date: DateTime.now().add(const Duration(days: 6, hours: 6)),
+        label: "Create Icon App",
+        jobdesk: "Design",
+      ),
+      ListTaskDateData(
+        date: DateTime.now().add(const Duration(days: 6, hours: 8)),
+        label: "Fixing Error Payment",
+        jobdesk: "Programmer",
+      ),
+      ListTaskDateData(
+        date: DateTime.now().add(const Duration(days: 6, hours: 10)),
+        label: "Create Form Interview",
+        jobdesk: "System Analyst",
+      ),
+    ]
+  ];
+
   void onPressedTask(int index, ListTaskAssignedData data) {}
   void onPressedAssignTask(int index, ListTaskAssignedData data) {}
   void onPressedMemberTask(int index, ListTaskAssignedData data) {}
-  // void onPressedCalendar() {}
-  // void onPressedTaskGroup(int index, ListTaskDateData data) {}
+  void onPressedCalendar() {}
+  void onPressedTaskGroup(int index, ListTaskDateData data) {}
 
   void onPressedProfil() {}
   void onSelectedMainMenu(int index, SelectionButtonData value) {}
