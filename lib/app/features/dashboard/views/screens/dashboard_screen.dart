@@ -5,14 +5,21 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:task_dashboard/app/constant/app_constant.dart';
 import 'package:task_dashboard/app/features/dashboard/controllers/dashboard_controller.dart';
+import 'package:task_dashboard/app/shared_components/card_task.dart';
+import 'package:task_dashboard/app/shared_components/header_text.dart';
+import 'package:task_dashboard/app/shared_components/search_field.dart';
 import 'package:task_dashboard/app/shared_components/selection_button.dart';
 import 'package:task_dashboard/app/shared_components/simple_selection_button.dart';
 import 'package:task_dashboard/app/shared_components/simple_user_profile.dart';
+import 'package:task_dashboard/app/shared_components/task_progress.dart';
 import 'package:task_dashboard/app/shared_components/user_profile.dart';
+import 'package:task_dashboard/app/utils/helpers/app_helpers.dart';
 
 part '../components/main_menu.dart';
 part '../components/member.dart';
 part '../components/task_menu.dart';
+part '../components/task_in_progress.dart';
+part '../components/header_weekly_task.dart';
 
 class DashboardScreen extends GetView<DashboardController> {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -84,7 +91,35 @@ class DashboardScreen extends GetView<DashboardController> {
   }
 
   Widget _buildTaskContentTask() {
-    return Container();
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: kSpacing),
+      child: Column(
+        children: [
+          const SizedBox(height: kSpacing),
+          SearchField(
+            onSearch: controller.searchTask,
+            hintText: "Search task...",
+          ),
+          const SizedBox(height: kSpacing),
+          Row(
+            children: [
+              HeaderText(
+                data: DateTime.now().formatdMMMMY(),
+              ),
+              const Spacer(),
+              SizedBox(
+                width: 200,
+                child: TaskProgress(data: controller.dataTask),
+              ),
+            ],
+          ),
+          const SizedBox(height: kSpacing),
+          _TaskInProgress(data: controller.taskInProgress),
+          const SizedBox(height: kSpacing),
+          const _HeaderWeeklyTask(),
+        ],
+      ),
+    );
   }
 
   Widget _buildCalendarContent() {
