@@ -7,6 +7,7 @@ import 'package:task_dashboard/app/constant/app_constant.dart';
 import 'package:task_dashboard/app/features/dashboard/controllers/dashboard_controller.dart';
 import 'package:task_dashboard/app/shared_components/card_task.dart';
 import 'package:task_dashboard/app/shared_components/header_text.dart';
+import 'package:task_dashboard/app/shared_components/list_task_assigned.dart';
 import 'package:task_dashboard/app/shared_components/search_field.dart';
 import 'package:task_dashboard/app/shared_components/selection_button.dart';
 import 'package:task_dashboard/app/shared_components/simple_selection_button.dart';
@@ -20,6 +21,7 @@ part '../components/member.dart';
 part '../components/task_menu.dart';
 part '../components/task_in_progress.dart';
 part '../components/header_weekly_task.dart';
+part '../components/weekly_task.dart';
 
 class DashboardScreen extends GetView<DashboardController> {
   const DashboardScreen({Key? key}) : super(key: key);
@@ -37,7 +39,7 @@ class DashboardScreen extends GetView<DashboardController> {
           ),
           Flexible(
             flex: 10,
-            child: _buildTaskContentTask(),
+            child: SingleChildScrollView(child: _buildTaskContentTask()),
           ),
           Flexible(
             flex: 4,
@@ -117,6 +119,13 @@ class DashboardScreen extends GetView<DashboardController> {
           _TaskInProgress(data: controller.taskInProgress),
           const SizedBox(height: kSpacing),
           const _HeaderWeeklyTask(),
+          const SizedBox(height: kSpacing),
+          _WeeklyTask(
+            data: controller.weeklyTask,
+            onPressed: controller.onPressedTask,
+            onPressedAssign: controller.onPressedAssignTask,
+            onPressedMember: controller.onPressedMemberTask,
+          )
         ],
       ),
     );
