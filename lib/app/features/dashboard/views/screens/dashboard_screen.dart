@@ -45,7 +45,7 @@ class DashboardScreen extends GetView<DashboardController> {
                 ),
               ),
         bottomNavigationBar:
-            ResponsiveBuilder.isDesktop(context) ? null : _BottomNavBar(),
+            ResponsiveBuilder.isDesktop(context) ? null : const _BottomNavBar(),
         body: ResponsiveBuilder(
           mobileBuilder: (context, constraints) {
             return SafeArea(
